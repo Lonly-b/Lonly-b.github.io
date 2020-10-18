@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+       .hide{display: none;}
+    </style>
+</head>
+<body>
+    <select name="provs">
+        <option>-请选择-
+        <option>北京
+        <option>上海
+        <option>重庆
+    </select>
+    
+    <select name="cities" class="hide"></select>
+    <script>
+      var cities=[
+           [
+              {"name":"东城区","value":101},
+              {"name":"西城区","value":102},
+              {"name":"海定区","value":103},
+              {"name":"朝阳区","value":104}
+           ],
+
+           [
+              {"name":"城区","value":201},
+              {"name":"西区","value":202},
+              {"name":"海区","value":203}
+           ],
+ 
+           [
+              {"name":"沙坪坝区","value":301},
+              {"name":"两路口","value":302},
+              {"name":"朝天门","value":303},
+              {"name":"合川","value":304}
+
+            ]
+          ];
+
+        // 1.选中省份列表中的一个省份，获取选中省份对应的子数组城市列表
+        var selProvs=document.getElementsByName("provs")[0];
+        // 查找第二个select备用
+        var selCts=document.getElementsByName("cities")[0];
+        //当selProvs的选中项改变时
+        selProvs.onchange=function(){
+            var selProvs=this;
+            //      获取当前选中项的下标位置   ：selectedIndex
+            var i=selProvs.selectedIndex;
+            //除非选中的不是第一项 -请选择- 才判断
+            if(i>0){
+                //获取当前省份对应的城市列表子数组
+                var cts=cities[i-1];
+                // console.log(cts);
+                //因为第二个select已经在页面上了，所以要添加多个平级option标签
+                 var frag=document.createDocumentFragment();
+                //在遍历之前，应该先添加一个<option>-请选择-,然后添加有意义的城市内容
+                //var opt=document.createElement("option");
+                //opt.innerHTML="-请选择-";
+                //frag.appendChild(opt);
+                frag.appendChild(new Option("-请选择-"));
+                //遍历数组中每个城市对象
+                for(var key of cts){
+                    //每遍历一个城市对象，就创建一个option元素对象，并加入文档片段中，同时设置option的内容为当前城市名
+                    //var opt=document.createElement("option");
+                    //opt.innerHTML=key.name;
+                    //frag.appendChild(opt);
+                    frag.appendChild(new Option(key.name,key.value));
+                }
+                //将整个文档片段加入第二个select中
+                //在追加新option之前，先删除旧的所有option (清空selCts的内容)
+                // selCts.innerHTML="";
+                selCts.length=0;
+                //将第二个select显示出来(清除class)
+                selCts.appendChild(frag);
+                selCts.className="";
+            }else{
+                //将第二个select隐藏，恢复成原来样子
+                selCts.className="hide";
+            }
+        }
+
+    </script>
+</body>
+</html>
